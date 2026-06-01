@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISC2 CC — 14-Day Cyber Shield</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050a14;
+    --surface: #0a1628;
+    --surface2: #0f1f3a;
+    --border: #1a3a5c;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --accent3: #39ff14;
+    --text: #e0eeff;
+    --muted: #5a7a9a;
+    --danger: #ff3355;
+    --success: #39ff14;
+    --warning: #ffcc00;
+    --card-glow: 0 0 30px rgba(0,212,255,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 30% 20%, rgba(0,212,255,0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(255,107,53,0.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+    animation: bgPulse 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes bgPulse {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
+
+  .app { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 20px; }
+
+  /* ── HEADER ── */
+  header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    position: relative;
+  }
+
+  .shield-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 20px rgba(0,212,255,0.6));
+    animation: shieldPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes shieldPulse {
+    0%, 100% { filter: drop-shadow(0 0 20px rgba(0,212,255,0.6)); }
+    50% { filter: drop-shadow(0 0 40px rgba(0,212,255,1)); }
+  }
+
+  h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    font-weight: 900;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, var(--accent), #ffffff, var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--muted);
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--card-glow);
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .progress-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .progress-count {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .progress-track {
+    background: rgba(255,255,255,0.05);
+    border-radius: 100px;
+    height: 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    border-radius: 100px;
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 0 12px rgba(0,212,255,0.5);
+  }
+
+  .day-dots {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .day-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+
+  .day-dot.completed {
+    background: linear-gradient(135deg, var(--accent3), #00aa00);
+    border-color: var(--accent3);
+    color: #000;
+    box-shadow: 0 0 10px rgba(57,255,20,0.4);
+  }
+
+  .day-dot.active {
+    background: linear-gradient(135deg, var(--accent), #0088cc);
+    border-color: var(--accent);
+    color: #000;
+    box-shadow: 0 0 14px rgba(0,212,255,0.6);
+    animation: activePulse 2s ease-in-out infinite;
+  }
+
+  @keyframes activePulse {
+    0%, 100% { box-shadow: 0 0 14px rgba(0,212,255,0.6); }
+    50% { box-shadow: 0 0 24px rgba(0,212,255,1); }
+  }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+    box-shadow: var(--card-glow);
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+
+  .stat-val {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-lbl {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .stat-card.cyan .stat-val { color: var(--accent); }
+  .stat-card.orange .stat-val { color: var(--accent2); }
+  .stat-card.green .stat-val { color: var(--accent3); }
+  .stat-card.red .stat-val { color: var(--danger); }
+
+  /* ── DAY SELECTOR ── */
+  .day-selector {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+  }
+
+  @media (max-width: 600px) {
+    .days-grid { grid-template-columns: repeat(4, 1fr); }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .day-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 6px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    color: var(--text);
+  }
+
+  .day-btn:hover {
+    border-color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    transform: translateY(-2px);
+  }
+
+  .day-btn.active-day {
+    border-color: var(--accent);
+    background: rgba(0,212,255,0.15);
+    box-shadow: 0 0 16px rgba(0,212,255,0.2);
+  }
+
+  .day-btn .day-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+  }
+
+  .day-btn .day-topic {
+    font-size: 0.6rem;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.3;
+  }
+
+  /* ── CONTENT AREA ── */
+  .content-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    box-shadow: var(--card-glow);
+  }
+
+  .content-header {
+    background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(255,107,53,0.05));
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .day-badge {
+    background: linear-gradient(135deg, var(--accent), #0088cc);
+    color: #000;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  .content-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .content-body { padding: 24px; }
+
+  /* ── TOPIC CARDS ── */
+  .topic-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .topic-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .topic-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--accent), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .topic-card:hover { border-color: var(--accent); transform: translateX(4px); }
+  .topic-card:hover::before { opacity: 1; }
+  .topic-card.expanded { border-color: var(--accent); background: rgba(0,212,255,0.05); }
+  .topic-card.expanded::before { opacity: 1; }
+
+  .topic-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .topic-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .topic-icon { font-size: 1.2rem; }
+
+  .topic-toggle {
+    color: var(--accent);
+    font-size: 1rem;
+    transition: transform 0.3s;
+  }
+
+  .topic-card.expanded .topic-toggle { transform: rotate(180deg); }
+
+  .topic-content {
+    display: none;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: rgba(224,238,255,0.85);
+  }
+
+  .topic-card.expanded .topic-content { display: block; }
+
+  /* ── CONCEPT BOXES ── */
+  .concept-box {
+    background: rgba(0,212,255,0.05);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 12px 0;
+  }
+
+  .concept-box.orange {
+    background: rgba(255,107,53,0.05);
+    border-color: rgba(255,107,53,0.2);
+  }
+
+  .concept-box.green {
+    background: rgba(57,255,20,0.05);
+    border-color: rgba(57,255,20,0.2);
+  }
+
+  .concept-box.red {
+    background: rgba(255,51,85,0.05);
+    border-color: rgba(255,51,85,0.2);
+  }
+
+  .box-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .concept-box.orange .box-label { color: var(--accent2); }
+  .concept-box.green .box-label { color: var(--accent3); }
+  .concept-box.red .box-label { color: var(--danger); }
+
+  /* keyword highlight */
+  .kw {
+    color: var(--accent);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9em;
+    background: rgba(0,212,255,0.1);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  .kw.orange { color: var(--accent2); background: rgba(255,107,53,0.1); }
+  .kw.green { color: var(--accent3); background: rgba(57,255,20,0.1); }
+  .kw.red { color: var(--danger); background: rgba(255,51,85,0.1); }
+
+  /* table */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.85rem;
+  }
+
+  .data-table th {
+    background: rgba(0,212,255,0.1);
+    color: var(--accent);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .data-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: rgba(224,238,255,0.8);
+    vertical-align: top;
+  }
+
+  .data-table tr:hover td { background: rgba(0,212,255,0.03); }
+
+  /* mnemonic */
+  .mnemonic {
+    background: linear-gradient(135deg, rgba(255,204,0,0.08), rgba(255,107,53,0.08));
+    border: 1px solid rgba(255,204,0,0.25);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--warning);
+  }
+
+  /* ── MCQ SECTION ── */
+  .mcq-section { margin-top: 24px; }
+
+  .mcq-header {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mcq-header::before {
+    content: '◉';
+    color: var(--accent2);
+    animation: blink 1.5s step-end infinite;
+  }
+
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .mcq-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    transition: border-color 0.2s;
+  }
+
+  .mcq-card.answered-correct { border-color: var(--success); background: rgba(57,255,20,0.04); }
+  .mcq-card.answered-wrong { border-color: var(--danger); background: rgba(255,51,85,0.04); }
+
+  .q-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .q-text {
+    font-size: 0.92rem;
+    font-weight: 500;
+    line-height: 1.6;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+
+  .options { display: flex; flex-direction: column; gap: 8px; }
+
+  .option {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.88rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--text);
+    text-align: left;
+    width: 100%;
+  }
+
+  .option:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(0,212,255,0.06);
+  }
+
+  .option:disabled { cursor: default; }
+
+  .option.correct { border-color: var(--success); background: rgba(57,255,20,0.1); color: var(--success); }
+  .option.wrong { border-color: var(--danger); background: rgba(255,51,85,0.1); color: var(--danger); }
+  .option.reveal { border-color: var(--success); background: rgba(57,255,20,0.06); }
+
+  .opt-letter {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .explanation {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: rgba(0,212,255,0.05);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent);
+    font-size: 0.84rem;
+    line-height: 1.7;
+    color: rgba(224,238,255,0.8);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .explanation.show { display: block; }
+  .explanation.wrong-exp { border-color: var(--danger); background: rgba(255,51,85,0.05); }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .exp-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  /* ── WEAK AREAS ── */
+  .weak-area-panel {
+    background: var(--surface);
+    border: 1px solid rgba(255,51,85,0.3);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+
+  .weak-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.88rem;
+  }
+
+  .weak-item:last-child { border-bottom: none; }
+
+  .weak-bar-wrap {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border-radius: 100px;
+    height: 6px;
+    overflow: hidden;
+  }
+
+  .weak-bar {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--danger), var(--warning));
+  }
+
+  .weak-pct {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    min-width: 36px;
+    text-align: right;
+  }
+
+  /* ── RESULTS ── */
+  .score-display {
+    text-align: center;
+    padding: 20px;
+    background: var(--surface2);
+    border-radius: 12px;
+    margin-top: 16px;
+  }
+
+  .score-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 3rem;
+    font-weight: 900;
+  }
+
+  .score-num.great { color: var(--success); text-shadow: 0 0 30px rgba(57,255,20,0.5); }
+  .score-num.ok { color: var(--warning); text-shadow: 0 0 30px rgba(255,204,0,0.5); }
+  .score-num.bad { color: var(--danger); text-shadow: 0 0 30px rgba(255,51,85,0.5); }
+
+  .score-msg {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--muted);
+    margin-top: 8px;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    background: var(--surface2);
+    padding: 4px;
+    border-radius: 10px;
+  }
+
+  .tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+
+  .tab.active {
+    background: var(--surface);
+    color: var(--accent);
+    border: 1px solid var(--border);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #0088cc);
+    color: #000;
+  }
+
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,212,255,0.4); }
+
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .btn-danger {
+    background: rgba(255,51,85,0.15);
+    color: var(--danger);
+    border: 1px solid rgba(255,51,85,0.3);
+  }
+
+  .action-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  /* ── DIAGRAM ── */
+  .diagram {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.9;
+    color: var(--accent);
+    margin: 12px 0;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 0.85rem;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    z-index: 1000;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { border-color: var(--success); }
+  .toast.error { border-color: var(--danger); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+  }
+
+  .empty-icon { font-size: 2.5rem; margin-bottom: 12px; display: block; opacity: 0.4; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header>
+    <span class="shield-icon">🛡️</span>
+    <h1>ISC2 CC CYBER SHIELD</h1>
+    <p class="subtitle">14-Day Certified in Cybersecurity — Exam Prep</p>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="progress-section">
+    <div class="progress-header">
+      <span class="progress-label">⚡ Mission Progress</span>
+      <span class="progress-count" id="progressCount">Day 1 of 14</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:7.14%"></div>
+    </div>
+    <div class="day-dots" id="dayDots"></div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card cyan">
+      <div class="stat-val" id="statDay">1</div>
+      <div class="stat-lbl">Current Day</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-val" id="statScore">—</div>
+      <div class="stat-lbl">Best Score</div>
+    </div>
+    <div class="stat-card orange">
+      <div class="stat-val" id="statAnswered">0</div>
+      <div class="stat-lbl">Answered</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-val" id="statWeak">0</div>
+      <div class="stat-lbl">Weak Areas</div>
+    </div>
+  </div>
+
+  <!-- DAY SELECTOR -->
+  <div class="day-selector">
+    <div class="section-title">Select Day</div>
+    <div class="days-grid" id="daysGrid"></div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content-panel" id="contentPanel">
+    <div class="content-header">
+      <div class="day-badge" id="dayBadge">DAY 1</div>
+      <div class="content-title" id="contentTitle">Security Principles Part 1</div>
+    </div>
+    <div class="content-body">
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('learn')">📚 Learn</button>
+        <button class="tab" onclick="switchTab('mcq')">❓ MCQ Quiz</button>
+        <button class="tab" onclick="switchTab('weak')">⚠️ Weak Areas</button>
+      </div>
+
+      <!-- LEARN TAB -->
+      <div class="tab-panel active" id="tab-learn">
+        <div id="topicList" class="topic-list"></div>
+      </div>
+
+      <!-- MCQ TAB -->
+      <div class="tab-panel" id="tab-mcq">
+        <div class="mcq-header">MCQ Challenge — Day <span id="mcqDayNum">1</span></div>
+        <div id="mcqContainer"></div>
+        <div id="mcqResult"></div>
+        <div class="action-row">
+          <button class="btn btn-primary" onclick="checkMCQ()">✅ Submit Answers</button>
+          <button class="btn btn-secondary" onclick="resetMCQ()">↺ Reset Quiz</button>
+        </div>
+      </div>
+
+      <!-- WEAK AREAS TAB -->
+      <div class="tab-panel" id="tab-weak">
+        <div class="section-title">Tracked Weak Areas</div>
+        <div id="weakList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────
+const CURRICULUM = {
+  1: {
+    title: "Security Principles Part 1",
+    topics: [
+      {
+        icon: "🔒",
+        name: "CIA Triad — The Foundation",
+        content: `
+<div class="concept-box">
+  <div class="box-label">Simple Concept</div>
+  The CIA Triad is the <strong>holy trinity of cybersecurity</strong>. Every security decision you make must balance these three properties.
+</div>
+<div class="diagram">
+        [CIA TRIAD]
+             ▲
+            / \\
+           /   \\
+    Confid-     Avail-
+    entiality   ability
+           \\   /
+            \\ /
+          Integrity
+</div>
+<table class="data-table">
+  <tr><th>Property</th><th>Question Answered</th><th>Main Threat</th><th>Tool</th></tr>
+  <tr><td>Confidentiality</td><td>Who can see it?</td><td>Unauthorized access</td><td>Encryption</td></tr>
+  <tr><td>Integrity</td><td>Was it changed?</td><td>Unauthorized modification</td><td>Hashing</td></tr>
+  <tr><td>Availability</td><td>Can I access it?</td><td>Denial of Service</td><td>Redundancy</td></tr>
+</table>
+<div class="mnemonic">🧠 MNEMONIC: "CIA = Cover It Always" — Cover (Confidentiality), Intact (Integrity), Always-on (Availability)</div>
+<div class="concept-box orange">
+  <div class="box-label">⚠️ Exam Tip — CIA Conflicts</div>
+  More security = less convenience. A system locked down for confidentiality may reduce availability. The exam loves to test your understanding of these trade-offs!
+</div>`
+      },
+      {
+        icon: "🔐",
+        name: "Confidentiality",
+        content: `
+<div class="concept-box">
+  <div class="box-label">Definition</div>
+  Ensures information is NOT disclosed to <span class="kw">unauthorized</span> individuals, processes, or devices.
+</div>
+<strong>Real-World:</strong> Your medical records are confidential — only your doctor can access them.<br><br>
+<strong>Key Terms:</strong> <span class="kw">Need-to-know</span> · <span class="kw">Least privilege</span> · <span class="kw">Encryption</span> · <span class="kw">Data classification</span><br><br>
+<strong>Protections:</strong>
+<ul style="margin:10px 0 0 20px;line-height:2">
+  <li>Encryption (scrambles data)</li>
+  <li>Access Controls (passwords, biometrics)</li>
+  <li>Data Classification (labels: Top Secret, Confidential, Public)</li>
+</ul>
+<div class="mnemonic">🧠 C = Cover it up! Keep it SECRET.</div>`
+      },
+      {
+        icon: "✅",
+        name: "Integrity",
+        content: `
+<div class="concept-box green">
+  <div class="box-label">Definition</div>
+  Ensures data is <span class="kw green">accurate</span>, <span class="kw green">complete</span>, and has NOT been altered in an unauthorized manner.
+</div>
+<strong>Real-World:</strong> You download a file and verify its SHA-256 hash. If it matches, the file wasn't tampered with.<br><br>
+<strong>Key Terms:</strong> <span class="kw">Hashing</span> · <span class="kw">Digital signatures</span> · <span class="kw">Checksums</span> · <span class="kw">Unauthorized modification</span><br><br>
+<strong>Tools:</strong>
+<table class="data-table">
+  <tr><th>Tool</th><th>How it protects Integrity</th></tr>
+  <tr><td>MD5 / SHA-256 Hashing</td><td>Creates a unique fingerprint — any change alters the hash</td></tr>
+  <tr><td>Digital Signatures</td><td>Cryptographically binds identity to data</td></tr>
+  <tr><td>Checksums</td><td>Detects accidental errors in transmission</td></tr>
+</table>
+<div class="mnemonic">🧠 I = Intact! Nothing was changed.</div>`
+      },
+      {
+        icon: "🌐",
+        name: "Availability",
+        content: `
+<div class="concept-box orange">
+  <div class="box-label">Definition</div>
+  Ensures systems and data are <span class="kw orange">accessible when needed</span> by authorized users.
+</div>
+<strong>Real-World:</strong> A DDoS attack floods a website with traffic until it crashes — Availability violated!<br><br>
+<strong>Key Terms:</strong> <span class="kw">DoS/DDoS</span> · <span class="kw">Redundancy</span> · <span class="kw">Fault tolerance</span> · <span class="kw">Uptime</span> · <span class="kw">Backups</span><br><br>
+<strong>Protections:</strong>
+<ul style="margin:10px 0 0 20px;line-height:2">
+  <li>Redundancy — duplicate systems take over if one fails</li>
+  <li>Load Balancing — spreads traffic so no single server is overwhelmed</li>
+  <li>Backups — restore data if systems fail</li>
+  <li>DDoS Protection — filters malicious traffic</li>
+</ul>
+<div class="mnemonic">🧠 A = Always accessible! Never down.</div>`
+      },
+      {
+        icon: "🪪",
+        name: "Authentication",
+        content: `
+<div class="concept-box">
+  <div class="box-label">Definition</div>
+  The process of <span class="kw">verifying identity</span>. Comes AFTER identification.
+</div>
+<div class="diagram">
+IDENTIFICATION → AUTHENTICATION → AUTHORIZATION
+ "I am Alice"     "Prove it!"     "What can Alice do?"
+ (Username)       (Password)      (Permissions)
+</div>
+<strong>The 3 (+ 2) Factors of Authentication:</strong>
+<table class="data-table">
+  <tr><th>Factor</th><th>Type</th><th>Examples</th></tr>
+  <tr><td>Factor 1</td><td>Something you <span class="kw">KNOW</span></td><td>Password, PIN, security question</td></tr>
+  <tr><td>Factor 2</td><td>Something you <span class="kw">HAVE</span></td><td>Smart card, token, phone OTP</td></tr>
+  <tr><td>Factor 3</td><td>Something you <span class="kw">ARE</span></td><td>Fingerprint, retina, face ID</td></tr>
+  <tr><td>Bonus</td><td>Something you <span class="kw">DO</span></td><td>Typing rhythm, signature</td></tr>
+  <tr><td>Bonus</td><td>Somewhere you <span class="kw">ARE</span></td><td>GPS location</td></tr>
+</table>
+<div class="concept-box red">
+  <div class="box-label">🚨 Common Exam Trap</div>
+  Password + Security Question = <span class="kw red">NOT MFA</span> (both are "something you KNOW" = same factor!)<br>
+  ATM Card + PIN = <span class="kw green">TRUE MFA</span> (HAVE + KNOW = different factors ✅)
+</div>
+<div class="mnemonic">🧠 KHA: Know · Have · Are — the three authentication factors</div>`
+      },
+      {
+        icon: "📜",
+        name: "Non-Repudiation",
+        content: `
+<div class="concept-box">
+  <div class="box-label">Definition</div>
+  Provides <span class="kw">proof</span> of origin/delivery so a sender cannot <span class="kw">deny</span> having sent a message or performed an action.
+</div>
+<strong>Real-World:</strong> Digitally signing a contract = you cannot later deny signing it. The signature is cryptographically tied to YOU.<br><br>
+<strong>Key Terms:</strong> <span class="kw">Digital signatures</span> · <span class="kw">Audit logs</span> · <span class="kw">Proof of origin</span> · <span class="kw">Accountability</span><br><br>
+<strong>Tools:</strong>
+<ul style="margin:10px 0 0 20px;line-height:2">
+  <li><strong>Digital Signatures</strong> — most important NR tool</li>
+  <li><strong>Audit Logs</strong> — record who did what, when</li>
+  <li><strong>Timestamps</strong> — prove WHEN something happened</li>
+  <li><strong>Video surveillance</strong> — proves physical presence</li>
+</ul>
+<div class="mnemonic">🧠 Non-Repudiation = "NO TAKE-BACKS!" You did it. We can prove it.</div>`
+      },
+      {
+        icon: "🔏",
+        name: "Privacy",
+        content: `
+<div class="concept-box">
+  <div class="box-label">Definition</div>
+  The right of individuals to control their <span class="kw">personal information</span> (PII/PHI).
+</div>
+<strong>Confidentiality vs Privacy:</strong>
+<table class="data-table">
+  <tr><th>Concept</th><th>Scope</th><th>Example</th></tr>
+  <tr><td>Confidentiality</td><td>ANY sensitive data</td><td>Trade secrets, military data</td></tr>
+  <tr><td>Privacy</td><td>Personal/individual data</td><td>Your name, SSN, medical records</td></tr>
+</table>
+<strong>PII Examples:</strong> <span class="kw">Name + Address</span> · <span class="kw">SSN</span> · <span class="kw">Email</span> · <span class="kw">Biometric data</span> · <span class="kw">Medical records (PHI)</span><br><br>
+<strong>Key Laws:</strong> GDPR (Europe) · HIPAA (healthcare) · CCPA (California)<br><br>
+<strong>Principles:</strong> <span class="kw">Data minimization</span> · <span class="kw">Consent</span> · <span class="kw">Right to be forgotten</span>
+<div class="mnemonic">🧠 Privacy = Personal (both start with P!) — Personal data control.</div>`
+      }
+    ],
+    mcqs: [
+      {
+        q: "A hospital ensures only doctors can access patient records. Which CIA property is being protected?",
+        opts: ["Availability","Integrity","Confidentiality","Non-Repudiation"],
+        ans: 2,
+        exp: "Restricting access to authorized personnel protects CONFIDENTIALITY (preventing unauthorized disclosure). Integrity = data accuracy. Availability = uptime. Non-repudiation = proving actions."
+      },
+      {
+        q: "An attacker launches a DDoS attack, taking down a website for 6 hours. Which CIA property is violated?",
+        opts: ["Confidentiality","Integrity","Non-Repudiation","Availability"],
+        ans: 3,
+        exp: "DDoS prevents authorized users from accessing the system = AVAILABILITY violation. No data was stolen (not confidentiality) or modified (not integrity)."
+      },
+      {
+        q: "A website provides a SHA-256 hash so you can verify a downloaded file. This protects which property?",
+        opts: ["Availability","Confidentiality","Integrity","Privacy"],
+        ans: 2,
+        exp: "SHA-256 hashing creates a fingerprint to verify data hasn't been changed = INTEGRITY. Hashing doesn't hide data (not confidentiality) and doesn't ensure uptime (not availability)."
+      },
+      {
+        q: "Which is the BEST example of Multi-Factor Authentication?",
+        opts: ["Password and security question","Fingerprint and retina scan","PIN and smart card","Username and password"],
+        ans: 2,
+        exp: "PIN (Know) + Smart Card (Have) = two DIFFERENT factor types = TRUE MFA. Password+Security Question = same factor (both Know). Fingerprint+Retina = same factor (both Are/biometrics)."
+      },
+      {
+        q: "An employee sends a fraudulent email and later claims they never sent it. Which concept prevents this?",
+        opts: ["Availability","Confidentiality","Authentication","Non-Repudiation"],
+        ans: 3,
+        exp: "NON-REPUDIATION provides cryptographic proof of who sent a message, preventing later denial. Authentication proves identity at login time but doesn't prevent later denial."
+      },
+      {
+        q: "What is the PRIMARY difference between Privacy and Confidentiality?",
+        opts: ["Confidentiality is only for digital data","Privacy is specifically about personal/individual data","Privacy is only a legal concept","There is no difference"],
+        ans: 1,
+        exp: "PRIVACY specifically concerns personal/individual data (PII/PHI). CONFIDENTIALITY is broader — it protects ANY sensitive information (trade secrets, government data, etc.)."
+      },
+      {
+        q: "A user types their username at a login screen. This action is called:",
+        opts: ["Authentication","Authorization","Identification","Non-Repudiation"],
+        ans: 2,
+        exp: "Entering a username = CLAIMING an identity = IDENTIFICATION. Authentication comes next (proving the identity with a password). Authorization = what you're allowed to do after authentication."
+      },
+      {
+        q: "Which tool BEST protects data Confidentiality?",
+        opts: ["Hashing","Backups","Encryption","Digital Signatures"],
+        ans: 2,
+        exp: "ENCRYPTION scrambles data so unauthorized users cannot read it = protects Confidentiality. Hashing protects Integrity. Backups protect Availability. Digital Signatures protect Integrity/Non-repudiation."
+      },
+      {
+        q: "ATM requires a debit card AND a PIN. This is:",
+        opts: ["Single-factor authentication","Multi-factor authentication","Two-step same-factor auth","Authorization"],
+        ans: 1,
+        exp: "Debit Card (Have) + PIN (Know) = two DIFFERENT factor types = MULTI-FACTOR AUTHENTICATION. This is the classic MFA example the ISC2 exam loves!"
+      },
+      {
+        q: "Which of the following is classified as PII?",
+        opts: ["Company revenue figures","Software version numbers","A person's Social Security Number","Internal server IP addresses"],
+        ans: 2,
+        exp: "A Social Security Number directly identifies a specific individual = PII. Company revenue, software versions, and internal IPs are not personal/individual identifying information."
+      }
+    ]
+  },
+  2: {
+    title: "Security Principles Part 2",
+    topics: [
+      {
+        icon: "⚖️",
+        name: "Risk Management Overview",
+        content: `
+<div class="concept-box">
+  <div class="box-label">Simple Concept</div>
+  Risk management is the process of identifying, assessing, and deciding what to do about risks to your organization.
+</div>
+<div class="diagram">
+RISK FORMULA:
+Risk = Threat × Vulnerability × Impact
+</div>
+<strong>Key Terms:</strong>
+<table class="data-table">
+  <tr><th>Term</th><th>Definition</th><th>Example</th></tr>
+  <tr><td><span class="kw">Threat</span></td><td>Potential cause of harm</td><td>Hacker, fire, flood</td></tr>
+  <tr><td><span class="kw">Vulnerability</span></td><td>Weakness that can be exploited</td><td>Unpatched software</td></tr>
+  <tr><td><span class="kw">Risk</span></td><td>Probability × Impact of a threat exploiting a vuln</td><td>Chance of breach</td></tr>
+  <tr><td><span class="kw">Asset</span></td><td>Anything of value to protect</td><td>Data, servers, reputation</td></tr>
+</table>
+<div class="mnemonic">🧠 "TVRIA" — Threat + Vulnerability = Risk to an Important Asset</div>`
+      },
+      {
+        icon: "📊",
+        name: "Risk Assessment",
+        content: `
+<div class="concept-box">
+  <div class="box-label">Two Types</div>
+  <strong>Quantitative</strong> = uses <span class="kw">numbers/dollar amounts</span><br>
+  <strong>Qualitative</strong> = uses <span class="kw">ratings</span> (High/Medium/Low)
+</div>
+<strong>Quantitative Formulas (Memorize These!):</strong>
+<table class="data-table">
+  <tr><th>Formula</th><th>Meaning</th></tr>
+  <tr><td><span class="kw">AV</span> = Asset Value</td><td>Dollar value of the asset</td></tr>
+  <tr><td><span class="kw">EF</span> = Exposure Factor</td><td>% of asset lost if incident occurs</td></tr>
+  <tr><td><span class="kw">SLE</span> = AV × EF</td><td>Single Loss Expectancy (one incident cost)</td></tr>
+  <tr><td><span class="kw">ARO</span> = Annual Rate of Occurrence</td><td>How often per year the threat occurs</td></tr>
+  <tr><td><span class="kw">ALE</span> = SLE × ARO</td><td>Annual Loss Expectancy (yearly cost)</td></tr>
+</table>
+<div class="mnemonic">🧠 "A Silly Elephant Rarely Annoys Lions" = AV·SLE·EF·ARO·ALE</div>`
+      },
+      {
+        icon: "🛡️",
+        name: "Risk Treatment (4 Options)",
+        content: `
+<div class="concept-box">
+  <div class="box-label">4 Ways to Handle Risk</div>
+  Once risk is assessed, you must choose what to do about it.
+</div>
+<table class="data-table">
+  <tr><th>Treatment</th><th>Action</th><th>Example</th></tr>
+  <tr><td><span class="kw">Avoid</span></td><td>Stop the risky activity entirely</td><td>Don't store credit cards</td></tr>
+  <tr><td><span class="kw">Transfer</span></td><td>Shift risk to someone else</td><td>Buy cyber insurance</td></tr>
+  <tr><td><span class="kw">Mitigate</span></td><td>Reduce probability or impact</td><td>Install a firewall</td></tr>
+  <tr><td><span class="kw">Accept</span></td><td>Acknowledge and live with the risk</td><td>Cost to fix > potential loss</td></tr>
+</table>
+<div class="mnemonic">🧠 "ATMA" — Avoid · Transfer · Mitigate · Accept</div>
+<div class="concept-box orange">
+  <div class="box-label">⚠️ Exam Tip</div>
+  <span class="kw">Residual risk</span> = risk remaining AFTER controls are applied. Some risk always remains. You can never reach ZERO risk!
+</div>`
+      },
+      {
+        icon: "🔧",
+        name: "Security Controls",
+        content: `
+<div class="concept-box">
+  <div class="box-label">Definition</div>
+  Security controls are <span class="kw">safeguards</span> implemented to reduce risk. Classified by TYPE and FUNCTION.
+</div>
+<strong>Control Types:</strong>
+<table class="data-table">
+  <tr><th>Type</th><th>Description</th><th>Example</th></tr>
+  <tr><td><span class="kw">Administrative</span></td><td>Policies, procedures, training</td><td>Security awareness training</td></tr>
+  <tr><td><span class="kw">Technical</span></td><td>Software/hardware controls</td><td>Firewall, encryption, IDS</td></tr>
+  <tr><td><span class="kw">Physical</span></td><td>Tangible security measures</td><td>Locks, guards, CCTV</td></tr>
+</table>
+<strong>Control Functions:</strong>
+<table class="data-table">
+  <tr><th>Function</th><th>Purpose</th><th>Example</th></tr>
+  <tr><td><span class="kw">Preventive</span></td><td>Stops incident before it happens</td><td>Firewall blocks attack</td></tr>
+  <tr><td><span class="kw">Detective</span></td><td>Identifies incident after it begins</td><td>IDS alerts on intrusion</td></tr>
+  <tr><td><span class="kw">Corrective</span></td><td>Fixes damage after incident</td><td>Restore from backup</td></tr>
+  <tr><td><span class="kw">Deterrent</span></td><td>Discourages attackers</td><td>"Warning: CCTV in use" sign</td></tr>
+  <tr><td><span class="kw">Compensating</span></td><td>Alternative when primary control fails</td><td>Manual review when software fails</td></tr>
+</table>
+<div class="mnemonic">🧠 "ATP = Admin·Tech·Physical" types. "PDDCC" = functions order</div>`
+      },
+      {
+        icon: "🏛️",
+        name: "Governance, Policies & Standards",
+        content: `
+<div class="concept-box">
+  <div class="box-label">Governance Hierarchy</div>
+  Think of this as a pyramid — top guides the bottom.
+</div>
+<div class="diagram">
+       ┌──────────────┐
+       │   POLICY     │  ← WHY (broad intent, exec-level)
+       └──────┬───────┘
+              │
+       ┌──────▼───────┐
+       │   STANDARD   │  ← WHAT (specific requirements)
+       └──────┬───────┘
+              │
+       ┌──────▼───────┐
+       │  PROCEDURE   │  ← HOW (step-by-step instructions)
+       └──────┬───────┘
+              │
+       ┌──────▼───────┐
+       │  GUIDELINE   │  ← SUGGESTIONS (optional best practice)
+       └──────────────┘
+</div>
+<table class="data-table">
+  <tr><th>Document</th><th>Mandatory?</th><th>Example</th></tr>
+  <tr><td><span class="kw">Policy</span></td><td>Yes</td><td>"All data must be encrypted"</td></tr>
+  <tr><td><span class="kw">Standard</span></td><td>Yes</td><td>"Use AES-256 encryption"</td></tr>
+  <tr><td><span class="kw">Procedure</span></td><td>Yes</td><td>Steps to encrypt a hard drive</td></tr>
+  <tr><td><span class="kw">Guideline</span></td><td>NO (optional)</td><td>Recommended password tips</td></tr>
+</table>
+<div class="concept-box red">
+  <div class="box-label">🚨 Exam Trap</div>
+  Guidelines are the ONLY non-mandatory item. Policies, Standards, and Procedures are all mandatory!
+</div>
+<div class="mnemonic">🧠 "PSPG" — Policies Stamp Procedures, Guidelines suggest</div>`
+      }
+    ],
+    mcqs: [
+      {
+        q: "An organization buys cyber insurance to handle the financial impact of a data breach. This is an example of which risk treatment?",
+        opts: ["Risk Avoidance","Risk Transfer","Risk Mitigation","Risk Acceptance"],
+        ans: 1,
+        exp: "Buying insurance TRANSFERS the financial risk to the insurance company. Avoidance = stop the activity. Mitigation = reduce the risk. Acceptance = live with the risk."
+      },
+      {
+        q: "A firewall that blocks malicious traffic before it reaches the network is what type of control?",
+        opts: ["Detective","Corrective","Preventive","Compensating"],
+        ans: 2,
+        exp: "A firewall PREVENTS attacks from reaching the network = PREVENTIVE control. Detective = identifies after the fact. Corrective = fixes damage. Compensating = alternative control."
+      },
+      {
+        q: "ALE is calculated as:",
+        opts: ["AV × EF","SLE × ARO","AV × ARO","EF × ARO"],
+        ans: 1,
+        exp: "ALE (Annual Loss Expectancy) = SLE × ARO. SLE = Single Loss Expectancy (one incident). ARO = Annual Rate of Occurrence (how often per year). So total yearly expected loss = SLE × ARO."
+      },
+      {
+        q: "Which document in the governance hierarchy is the ONLY optional/non-mandatory one?",
+        opts: ["Policy","Standard","Procedure","Guideline"],
+        ans: 3,
+        exp: "GUIDELINES are optional best-practice recommendations. Policies, Standards, and Procedures are all mandatory and must be followed."
+      },
+      {
+        q: "After implementing security controls, some risk still remains. This is called:",
+        opts: ["Inherent risk","Residual risk","Total risk","Accepted risk"],
+        ans: 1,
+        exp: "RESIDUAL RISK is the risk remaining AFTER controls are applied. You can NEVER reach zero risk. Inherent risk = risk before any controls are applied."
+      },
+      {
+        q: "Security awareness training for employees is what type of security control?",
+        opts: ["Technical","Physical","Administrative","Preventive"],
+        ans: 2,
+        exp: "Training is an ADMINISTRATIVE control (policies, procedures, training). Technical = software/hardware. Physical = locks/guards. Preventive is a FUNCTION not a type."
+      },
+      {
+        q: "A company decides the cost to fix a vulnerability exceeds the potential loss, so they do nothing. This is:",
+        opts: ["Risk Avoidance","Risk Transfer","Risk Mitigation","Risk Acceptance"],
+        ans: 3,
+        exp: "When the cost to fix > potential loss, organizations may choose RISK ACCEPTANCE — acknowledging and accepting the risk as is. This is a valid and often appropriate business decision."
+      },
+      {
+        q: "A company policy states 'All data must be encrypted at rest.' The specific requirement 'Use AES-256' is defined in a:",
+        opts: ["Policy","Guideline","Standard","Procedure"],
+        ans: 2,
+        exp: "STANDARDS specify the WHAT — the specific technical requirements (like 'use AES-256'). Policies state the broad WHY/intent. Procedures give the HOW (step-by-step). Guidelines are optional suggestions."
+      },
+      {
+        q: "Risk is BEST described as:",
+        opts: ["A weakness in a system","A potential cause of harm","The likelihood and impact of a threat exploiting a vulnerability","The value of an asset"],
+        ans: 2,
+        exp: "Risk = the probability × impact of a threat exploiting a vulnerability. Weakness = Vulnerability. Potential cause of harm = Threat. Asset value is separate from risk calculation."
+      },
+      {
+        q: "An IDS that alerts security staff when an intrusion is detected is what type of control?",
+        opts: ["Preventive","Detective","Corrective","Deterrent"],
+        ans: 1,
+        exp: "An IDS DETECTS intrusions (it alerts after the attack begins) = DETECTIVE control. A firewall would be preventive (blocks before entry). Restoring from backup = corrective."
+      }
+    ]
+  },
+  3: {
+    title: "Access Controls",
+    topics: [
+      {
+        icon: "🚪",
+        name: "Access Control Overview",
+        content: `
+<div class="concept-box">
+  <div class="box-label">What is Access Control?</div>
+  Access control determines <span class="kw">WHO can access WHAT resources</span> and <span class="kw">WHAT they can do</span> with them.
+</div>
+<div class="diagram">
+Subject (Who) → Access Control → Object (What)
+   User              Policy         File/Server
+</div>
+<strong>The AAA Framework:</strong>
+<table class="data-table">
+  <tr><th>Step</th><th>Question</th><th>Example</th></tr>
+  <tr><td><span class="kw">Authentication</span></td><td>Who are you?</td><td>Password check</td></tr>
+  <tr><td><span class="kw">Authorization</span></td><td>What can you do?</td><td>Read-only access</td></tr>
+  <tr><td><span class="kw">Accounting</span></td><td>What did you do?</td><td>Audit logs</td></tr>
+</table>`
+      },
+      {
+        icon: "🏢",
+        name: "Physical vs Logical Controls",
+        content: `
+<table class="data-table">
+  <tr><th>Type</th><th>Description</th><th>Examples</th></tr>
+  <tr><td><span class="kw">Physical</span></td><td>Tangible barriers</td><td>Locks, guards, biometric doors, CCTV, fences, mantraps</td></tr>
+  <tr><td><span class="kw">Logical</span></td><td>Software-based controls</td><td>Passwords, ACLs, encryption, firewalls, MFA</td></tr>
+</table>
+<div class="mnemonic">🧠 Physical = you can TOUCH it. Logical = it lives in SOFTWARE.</div>
+<div class="concept-box orange">
+  <div class="box-label">⚠️ Special Physical Controls</div>
+  <strong>Mantrap:</strong> Two-door entry — you enter the first door, it locks, identity is verified, then the second door opens. Prevents tailgating.<br>
+  <strong>Tailgating:</strong> An unauthorized person follows an authorized person through a secured door.
+</div>`
+      },
+      {
+        icon: "⬇️",
+        name: "Least Privilege & Segregation of Duties",
+        content: `
+<div class="concept-box green">
+  <div class="box-label">Least Privilege</div>
+  Users should have the <span class="kw green">MINIMUM access</span> necessary to do their job — nothing more.
+</div>
+<strong>Real-World:</strong> An accountant needs access to financial records but NOT to HR files.<br><br>
+<div class="concept-box">
+  <div class="box-label">Segregation of Duties (SoD)</div>
+  No single person should have enough access to <span class="kw">commit fraud</span> or <span class="kw">make critical errors alone</span>.
+</div>
+<strong>Real-World:</strong> The person who creates a payment request cannot ALSO approve it.<br><br>
+<div class="concept-box orange">
+  <div class="box-label">Need to Know</div>
+  Even if you HAVE clearance, you only get access to information you <span class="kw orange">specifically need</span> for your job.
+</div>
+<div class="mnemonic">🧠 Least Privilege = Less is More (security-wise!)</div>`
+      },
+      {
+        icon: "📋",
+        name: "DAC, MAC, RBAC",
+        content: `
+<div class="concept-box">
+  <div class="box-label">3 Main Access Control Models</div>
+  The most important models for the CC exam!
+</div>
+<table class="data-table">
+  <tr><th>Model</th><th>Full Name</th><th>Who Controls Access?</th><th>Example</th></tr>
+  <tr><td><span class="kw">DAC</span></td><td>Discretionary AC</td><td>The DATA OWNER</td><td>Windows file permissions — you set who can read your files</td></tr>
+  <tr><td><span class="kw">MAC</span></td><td>Mandatory AC</td><td>The SYSTEM/POLICY (not owner)</td><td>Military — Top Secret label, only TS-cleared users can read</td></tr>
+  <tr><td><span class="kw">RBAC</span></td><td>Role-Based AC</td><td>The USER'S ROLE</td><td>All "Managers" get manager-level access</td></tr>
+</table>
+<div class="concept-box red">
+  <div class="box-label">🚨 Key Differences</div>
+  <strong>DAC:</strong> Flexible, owner decides, LEAST secure (users can share access)<br>
+  <strong>MAC:</strong> Rigid, system enforces labels, MOST secure, used in government/military<br>
+  <strong>RBAC:</strong> Middle ground, manages large organizations efficiently by role
+</div>
+<div class="mnemonic">🧠 DAC=Discretion of owner | MAC=Mandatory system rules | RBAC=Role determines access</div>`
+      }
+    ],
+    mcqs: [
+      {
+        q: "A military system assigns data labels (Top Secret, Secret, Confidential) and only allows access based on matching clearance. This is:",
+        opts: ["DAC","RBAC","MAC","ABAC"],
+        ans: 2,
+        exp: "MAC (Mandatory Access Control) uses system-enforced LABELS. Users cannot override it. The military/government uses MAC because the system (not the data owner) controls access based on classification labels."
+      },
+      {
+        q: "An employee in Windows sets their document to 'Read Only' for everyone else. This is:",
+        opts: ["MAC","RBAC","DAC","Least Privilege"],
+        ans: 2,
+        exp: "DAC (Discretionary Access Control) allows DATA OWNERS to control who can access their files. Windows file permissions are the classic DAC example."
+      },
+      {
+        q: "A company assigns access permissions based on job title (Manager, Employee, Admin). This is:",
+        opts: ["DAC","MAC","RBAC","Mandatory AC"],
+        ans: 2,
+        exp: "RBAC (Role-Based Access Control) assigns permissions to ROLES, not individuals. All users with the same role get the same access — great for large organizations."
+      },
+      {
+        q: "The principle that no single employee should be able to complete a high-risk transaction alone is called:",
+        opts: ["Least Privilege","Need to Know","Segregation of Duties","Mandatory Access Control"],
+        ans: 2,
+        exp: "SEGREGATION OF DUTIES ensures no single person can both initiate AND authorize a transaction — prevents fraud and errors. Example: different people for payment creation vs approval."
+      },
+      {
+        q: "A two-door entry system that verifies identity between doors to prevent tailgating is called a:",
+        opts: ["Checkpoint","Mantrap","Bollard","Access point"],
+        ans: 1,
+        exp: "A MANTRAP has two doors — you enter the first, it locks, identity is verified, then the second opens. Prevents unauthorized entry by tailgating (following someone through a secured door)."
+      },
+      {
+        q: "Which access control principle ensures users have only the minimum permissions needed for their job?",
+        opts: ["Segregation of Duties","Need to Know","Least Privilege","MAC"],
+        ans: 2,
+        exp: "LEAST PRIVILEGE = minimum necessary access. It limits damage if an account is compromised or misused. Need-to-Know is related but specifically about information access within your clearance level."
+      },
+      {
+        q: "The AAA framework in access control stands for:",
+        opts: ["Authentication, Authorization, Accounting","Auditing, Access, Availability","Authentication, Access, Accountability","Authorization, Auditing, Availability"],
+        ans: 0,
+        exp: "AAA = Authentication (who are you?), Authorization (what can you do?), Accounting (what did you do?). All three are required for a complete access control system."
+      },
+      {
+        q: "Passwords, ACLs, and encryption are examples of which type of access control?",
+        opts: ["Physical","Administrative","Logical","Preventive"],
+        ans: 2,
+        exp: "LOGICAL (also called Technical) controls are software-based. Passwords, ACLs, encryption, and firewalls are all logical. Physical controls are tangible (locks, guards). Administrative = policies/training."
+      },
+      {
+        q: "Which access control model is MOST secure and used in government/military environments?",
+        opts: ["DAC","RBAC","MAC","Rule-based AC"],
+        ans: 2,
+        exp: "MAC (Mandatory Access Control) is the MOST secure because the SYSTEM enforces labels — users cannot override it. DAC lets owners decide (flexible but less secure). RBAC is efficient for business."
+      },
+      {
+        q: "An employee has Top Secret clearance but is denied access to a specific file because the file is unrelated to their current project. This enforces:",
+        opts: ["Least Privilege","Need to Know","MAC","Segregation of Duties"],
+        ans: 1,
+        exp: "NEED TO KNOW means even WITH the right clearance level, you only access information relevant to your SPECIFIC job/project. This limits exposure even among trusted staff."
+      }
+    ]
+  }
+};
+
+// Fill remaining days with placeholder data
+for (let d = 4; d <= 14; d++) {
+  const titles = {
+    4: "Networking Fundamentals", 5: "Ports & Protocols",
+    6: "Network Attacks", 7: "Network Defense",
+    8: "Network Security Infrastructure", 9: "Data Security",
+    10: "Security Operations", 11: "Security Policies",
+    12: "Business Continuity", 13: "Complete Revision",
+    14: "Full Mock Exam"
+  };
+  CURRICULUM[d] = {
+    title: titles[d],
+    topics: [{
+      icon: "🔒",
+      name: `${titles[d]} — Coming Soon`,
+      content: `<div class="concept-box"><div class="box-label">Study Note</div>Say <strong>"NEXT DAY"</strong> in the chat to unlock the next day's full lesson! Study Day ${d-1} thoroughly first.<br><br>Each day builds on the previous — don't skip ahead!</div>`
+    }],
+    mcqs: []
+  };
+}
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let state = {
+  currentDay: 1,
+  answers: {},       // { "day-qIdx": chosenIdx }
+  scores: {},        // { day: score }
+  weakTopics: {},    // { topicName: wrongCount }
+  totalAnswered: 0
+};
+
+// Try to load from localStorage
+try {
+  const saved = localStorage.getItem('cc_exam_state');
+  if (saved) state = JSON.parse(saved);
+} catch(e) {}
+
+function saveState() {
+  try { localStorage.setItem('cc_exam_state', JSON.stringify(state)); } catch(e) {}
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+function init() {
+  buildDayDots();
+  buildDaysGrid();
+  renderDay(state.currentDay);
+  updateStats();
+}
+
+function buildDayDots() {
+  const container = document.getElementById('dayDots');
+  container.innerHTML = '';
+  for (let d = 1; d <= 14; d++) {
+    const dot = document.createElement('div');
+    dot.className = 'day-dot' + (d === state.currentDay ? ' active' : (state.scores[d] !== undefined ? ' completed' : ''));
+    dot.textContent = d;
+    dot.onclick = () => selectDay(d);
+    container.appendChild(dot);
+  }
+  document.getElementById('progressFill').style.width = ((state.currentDay / 14) * 100) + '%';
+  document.getElementById('progressCount').textContent = `Day ${state.currentDay} of 14`;
+}
+
+function buildDaysGrid() {
+  const grid = document.getElementById('daysGrid');
+  grid.innerHTML = '';
+  const shortTitles = {
+    1:"CIA Triad",2:"Risk Mgmt",3:"Access Ctrl",4:"Networking",5:"Ports",
+    6:"Attacks",7:"Defense",8:"Net Infra",9:"Data Sec",10:"Sec Ops",
+    11:"Policies",12:"BCP/DR",13:"Revision",14:"Mock Exam"
+  };
+  for (let d = 1; d <= 14; d++) {
+    const btn = document.createElement('div');
+    btn.className = 'day-btn' + (d === state.currentDay ? ' active-day' : '');
+    btn.innerHTML = `<span class="day-num">${d}</span><div class="day-topic">${shortTitles[d]}</div>`;
+    btn.onclick = () => selectDay(d);
+    grid.appendChild(btn);
+  }
+}
+
+function selectDay(d) {
+  state.currentDay = d;
+  saveState();
+  buildDayDots();
+  buildDaysGrid();
+  renderDay(d);
+  updateStats();
+  switchTab('learn');
+}
+
+// ─────────────────────────────────────────────
+// RENDER DAY
+// ─────────────────────────────────────────────
+function renderDay(d) {
+  const day = CURRICULUM[d];
+  document.getElementById('dayBadge').textContent = `DAY ${d}`;
+  document.getElementById('contentTitle').textContent = day.title;
+  document.getElementById('mcqDayNum').textContent = d;
+
+  // Topics
+  const topicList = document.getElementById('topicList');
+  topicList.innerHTML = '';
+  day.topics.forEach((t, i) => {
+    const card = document.createElement('div');
+    card.className = 'topic-card';
+    card.id = `topic-${d}-${i}`;
+    card.innerHTML = `
+      <div class="topic-header" onclick="toggleTopic(${d},${i})">
+        <div class="topic-name"><span class="topic-icon">${t.icon}</span>${t.name}</div>
+        <div class="topic-toggle">▾</div>
+      </div>
+      <div class="topic-content">${t.content}</div>`;
+    topicList.appendChild(card);
+  });
+
+  // MCQs
+  renderMCQs(d);
+  renderWeakAreas();
+}
+
+function toggleTopic(d, i) {
+  const card = document.getElementById(`topic-${d}-${i}`);
+  card.classList.toggle('expanded');
+}
+
+// ─────────────────────────────────────────────
+// MCQ
+// ─────────────────────────────────────────────
+function renderMCQs(d) {
+  const container = document.getElementById('mcqContainer');
+  container.innerHTML = '';
+  const day = CURRICULUM[d];
+
+  if (!day.mcqs || day.mcqs.length === 0) {
+    container.innerHTML = '<div class="empty-state"><span class="empty-icon">🔒</span>MCQs for this day coming soon!</div>';
+    return;
+  }
+
+  day.mcqs.forEach((q, qi) => {
+    const key = `${d}-${qi}`;
+    const answered = state.answers[key];
+
+    const card = document.createElement('div');
+    card.className = 'mcq-card' + (answered !== undefined ? (answered === q.ans ? ' answered-correct' : ' answered-wrong') : '');
+    card.id = `mcq-${d}-${qi}`;
+
+    const optionsHtml = q.opts.map((opt, oi) => {
+      let cls = '';
+      if (answered !== undefined) {
+        if (oi === q.ans) cls = 'correct';
+        else if (oi === answered && answered !== q.ans) cls = 'wrong';
+      }
+      return `<button class="option ${cls}" onclick="answerQ(${d},${qi},${oi})" ${answered !== undefined ? 'disabled' : ''}>
+        <span class="opt-letter">${String.fromCharCode(65+oi)}</span>${opt}
+      </button>`;
+    }).join('');
+
+    const expCls = answered !== undefined ? 'show' + (answered !== q.ans ? ' wrong-exp' : '') : '';
+    card.innerHTML = `
+      <div class="q-num">Q${qi+1} of ${day.mcqs.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options">${optionsHtml}</div>
+      <div class="explanation ${expCls}">
+        <div class="exp-label">${answered !== undefined ? (answered === q.ans ? '✅ Correct!' : '❌ Incorrect') : ''}</div>
+        ${q.exp}
+      </div>`;
+    container.appendChild(card);
+  });
+
+  document.getElementById('mcqResult').innerHTML = '';
+}
+
+function answerQ(d, qi, chosen) {
+  const key = `${d}-${qi}`;
+  if (state.answers[key] !== undefined) return;
+
+  state.answers[key] = chosen;
+  state.totalAnswered++;
+
+  const q = CURRICULUM[d].mcqs[qi];
+  const isCorrect = chosen === q.ans;
+
+  // Track weak areas
+  const topicName = CURRICULUM[d].topics[Math.min(qi, CURRICULUM[d].topics.length-1)]?.name || CURRICULUM[d].title;
+  if (!isCorrect) {
+    state.weakTopics[topicName] = (state.weakTopics[topicName] || 0) + 1;
+  }
+
+  saveState();
+  renderMCQs(d);
+  updateStats();
+  showToast(isCorrect ? '✅ Correct!' : '❌ Wrong — check the explanation', isCorrect ? 'success' : 'error');
+}
+
+function checkMCQ() {
+  const d = state.currentDay;
+  const mcqs = CURRICULUM[d].mcqs;
+  if (!mcqs || mcqs.length === 0) return;
+
+  let correct = 0;
+  mcqs.forEach((q, qi) => {
+    const key = `${d}-${qi}`;
+    if (state.answers[key] === q.ans) correct++;
+  });
+
+  const answered = mcqs.filter((_, qi) => state.answers[`${d}-${qi}`] !== undefined).length;
+  const pct = Math.round((correct / mcqs.length) * 100);
+
+  state.scores[d] = pct;
+  saveState();
+  updateStats();
+
+  const cls = pct >= 80 ? 'great' : pct >= 60 ? 'ok' : 'bad';
+  const msgs = { great: 'EXCELLENT — Exam Ready! 🎯', ok: 'DECENT — Review weak areas 📚', bad: 'NEEDS WORK — Restudy topics 🔄' };
+
+  document.getElementById('mcqResult').innerHTML = `
+    <div class="score-display">
+      <div class="score-num ${cls}">${pct}%</div>
+      <div class="score-msg">${correct}/${mcqs.length} CORRECT — ${msgs[cls]}</div>
+    </div>`;
+}
+
+function resetMCQ() {
+  const d = state.currentDay;
+  CURRICULUM[d].mcqs.forEach((_, qi) => {
+    delete state.answers[`${d}-${qi}`];
+  });
+  delete state.scores[d];
+  saveState();
+  renderMCQs(d);
+  document.getElementById('mcqResult').innerHTML = '';
+  showToast('Quiz reset!', '');
+}
+
+// ─────────────────────────────────────────────
+// WEAK AREAS
+// ─────────────────────────────────────────────
+function renderWeakAreas() {
+  const container = document.getElementById('weakList');
+  const weak = Object.entries(state.weakTopics).sort((a,b) => b[1]-a[1]);
+
+  if (weak.length === 0) {
+    container.innerHTML = '<div class="empty-state"><span class="empty-icon">✅</span>No weak areas tracked yet.<br>Answer MCQs to see your weak spots!</div>';
+    return;
+  }
+
+  const maxVal = weak[0][1];
+  container.innerHTML = weak.map(([topic, count]) => `
+    <div class="weak-item">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:.85rem;font-weight:500;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${topic}</div>
+        <div class="weak-bar-wrap"><div class="weak-bar" style="width:${(count/maxVal)*100}%"></div></div>
+      </div>
+      <div class="weak-pct" style="color:var(--danger)">${count} ✗</div>
+    </div>`).join('');
+}
+
+// ─────────────────────────────────────────────
+// STATS
+// ─────────────────────────────────────────────
+function updateStats() {
+  document.getElementById('statDay').textContent = state.currentDay;
+
+  const scores = Object.values(state.scores);
+  document.getElementById('statScore').textContent = scores.length ? Math.max(...scores) + '%' : '—';
+  document.getElementById('statAnswered').textContent = state.totalAnswered;
+  document.getElementById('statWeak').textContent = Object.keys(state.weakTopics).length;
+}
+
+// ─────────────────────────────────────────────
+// TABS
+// ─────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    const names = ['learn','mcq','weak'];
+    t.classList.toggle('active', names[i] === name);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'weak') renderWeakAreas();
+}
+
+// ─────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────
+let toastTimer;
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ─────────────────────────────────────────────
+// START
+// ─────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
