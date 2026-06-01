@@ -2,8 +2,6 @@
 
 An interactive cybersecurity study guide for the ISC2 Certified in Cybersecurity (CC) exam.
 
-**Live Site**: https://isc2-cc-cyber-shield.netlify.app
-
 ## What's Inside
 
 - 14-Day structured study plan
@@ -11,15 +9,21 @@ An interactive cybersecurity study guide for the ISC2 Certified in Cybersecurity
 - Practice questions and flashcards
 - Exam tips and revision sheets
 
+## How to Use
+
+No installation or internet needed — just:
+
+1. Download or clone this repo
+2. Double-click `index.html` to open it in your browser
+3. Start studying! 🎯
+
+```sh
+git clone https://github.com/M-S-Sreelakshmi/isc2-cc-cyber-shield.git
+cd isc2-cc-cyber-shield
+# Then open index.html in your browser
+```
+
 ## Tech Stack
 
-- Pure HTML, CSS, JavaScript (no frameworks)
-- Self-contained single file
-
-## Run Locally
-
-Just open `index.html` in your browser — no installation needed!
-
-## Deploy
-
-Connected to Netlify for auto-deployment on every push to `main`.
+- Pure HTML, CSS, JavaScript (no frameworks, no dependencies)
+- Works completely offline
